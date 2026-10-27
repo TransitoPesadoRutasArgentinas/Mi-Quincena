@@ -3,18 +3,21 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mi Quincena - UOCRA</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#151515;color:white;font-family:Arial,sans-serif;padding:20px}
-h1{color:#ff8500;text-align:center}
+body{margin:0;background:#151515;color:white;font-family:Arial,sans-serif;padding:18px}
+h1{text-align:center;color:#ff8500;margin-bottom:5px}
 .sub{text-align:center;color:#aaa}
-.card{background:#242424;padding:18px;border-radius:14px;margin-top:20px}
+.card{background:#242424;padding:18px;border-radius:15px;margin:20px 0}
 label{display:block;margin:14px 0 6px}
-input{width:100%;padding:13px;background:#333;color:white;border:1px solid #555;border-radius:8px;font-size:17px}
-button{width:100%;padding:15px;background:#ff8500;color:#111;border:0;border-radius:10px;font-size:17px;font-weight:bold;margin-top:18px}
-.resultado{font-size:23px;color:#ff9900;font-weight:bold}
+input{width:100%;padding:13px;background:#333;color:white;border:1px solid #555;border-radius:9px;font-size:17px;color-scheme:dark}
+button{width:100%;padding:14px;margin-top:14px;background:#ff8500;color:#111;border:0;border-radius:10px;font-size:17px;font-weight:bold}
+.secondary{background:#444;color:white}
+.result{color:#ff9900;font-size:23px;font-weight:bold}
+.item{border-bottom:1px solid #555;padding:12px 0}
+small{color:#aaa}
 </style>
 </head>
 <body>
@@ -22,44 +25,159 @@ button{width:100%;padding:15px;background:#ff8500;color:#111;border:0;border-rad
 <p class="sub">UOCRA - Control de jornada</p>
 
 <div class="card">
-<h3>Registrar jornada</h3>
+<h2>Registrar jornada</h2>
 <label>Fecha</label>
-<input type="date" id="fecha">
+<input type="date" id="fecha" min="2026-10-16">
 <label>Hora de entrada</label>
 <input type="time" id="entrada" value="07:30">
 <label>Hora de salida</label>
 <input type="time" id="salida" value="17:00">
-<button onclick="calcular()">Calcular horas</button>
+<button onclick="guardar()">Guardar jornada</button>
 </div>
 
 <div class="card">
-<h3>Resultado del día</h3>
-<p>Horas normales: <span id="normales">0</span></p>
-<p>Horas extras: <span id="extras">0</span></p>
-<p class="resultado" id="total">Total: 0 horas</p>
+<h2>Resultado del día</h2>
+<p id="normales">Horas normales: 0</p>
+<p id="extras">Horas extras: 0</p>
+<p class="result" id="total">Total: 0 horas</p>
+</div>
+
+<div class="card">
+<h2>Resumen quincenal</h2>
+<p id="periodo"></p>
+<p id="acumulado">Total trabajado: 0 horas</p>
+<p id="extraAcum">Horas extras: 0</p>
+<h3>Jornadas registradas</h3>
+<div id="historial"></div>
 </div>
 
 <script>
-document.getElementById("fecha").value =
-new Date().toLocaleDateString("en-CA");
+const CLAVE="mi_quincena_jornadas_v1";
+let jornadas=[];
+try{
+ const datos=JSON.parse(localStorage.getItem(CLAVE)||"[]");
+ if(Array.isArray(datos)) jornadas=datos;
+}catch(e){}
 
-function calcular(){
-const entrada=document.getElementById("entrada").value;
-const salida=document.getElementById("salida").value;
-if(!entrada||!salida){alert("Completá los horarios");return;}
-const [he,me]=entrada.split(":").map(Number);
-const [hs,ms]=salida.split(":").map(Number);
-let minutos=(hs*60+ms)-(he*60+me);
-if(minutos<0)minutos+=1440;
-const horas=minutos/60;
-const normales=Math.min(horas,8);
-const extras=Math.max(horas-8,0);
-document.getElementById("normales").textContent=normales.toFixed(2);
-document.getElementById("extras").textContent=extras.toFixed(2);
-document.getElementById("total").textContent=
-"Total: "+horas.toFixed(2)+" horas";
+const hoy=new Date();
+const fechaHoy=[
+ hoy.getFullYear(),
+ String(hoy.getMonth()+1).padStart(2,"0"),
+ String(hoy.getDate()).padStart(2,"0")
+].join("-");
+document.getElementById("fecha").value=fechaHoy;
+
+function calcular(entrada,salida){
+ const [he,me]=entrada.split(":").map(Number);
+ const [hs,ms]=salida.split(":").map(Number);
+ let minutos=(hs*60+ms)-(he*60+me);
+ if(minutos<0) minutos+=1440;
+ const horas=minutos/60;
+ return {
+  horas,
+  normales:Math.min(horas,8),
+  extras:Math.max(horas-8,0)
+ };
 }
+
+function guardar(){
+ const fecha=document.getElementById("fecha").value;
+ const entrada=document.getElementById("entrada").value;
+ const salida=document.getElementById("salida").value;
+ if(!fecha||!entrada||!salida){
+  alert("Completá todos los datos");
+  return;
+ }
+ if(fecha<"2026-10-16"){
+  alert("La fecha debe ser desde el 16 de octubre");
+  return;
+ }
+ const r=calcular(entrada,salida);
+ if(r.horas===0){
+  alert("Revisá los horarios");
+  return;
+ }
+ if(jornadas.some(j=>j.fecha===fecha)){
+  if(!confirm("Ya existe ese día. ¿Reemplazarlo?"))return;
+ }
+ jornadas=jornadas.filter(j=>j.fecha!==fecha);
+ jornadas.push({fecha,entrada,salida});
+ localStorage.setItem(CLAVE,JSON.stringify(jornadas));
+ document.getElementById("normales").textContent=
+  "Horas normales: "+r.normales.toFixed(2);
+ document.getElementById("extras").textContent=
+  "Horas extras: "+r.extras.toFixed(2);
+ document.getElementById("total").textContent=
+  "Total: "+r.horas.toFixed(2)+" horas";
+ mostrar();
+ alert("Jornada guardada");
+}
+
+function periodo(fecha){
+ const [a,m,d]=fecha.split("-").map(Number);
+ const inicio=d<=15?1:16;
+ const fin=d<=15?15:new Date(a,m,0).getDate();
+ return {
+  inicio:[a,String(m).padStart(2,"0"),String(inicio).padStart(2,"0")].join("-"),
+  fin:[a,String(m).padStart(2,"0"),String(fin).padStart(2,"0")].join("-")
+ };
+}
+
+function editar(fecha){
+ const j=jornadas.find(x=>x.fecha===fecha);
+ if(!j)return;
+ document.getElementById("fecha").value=j.fecha;
+ document.getElementById("entrada").value=j.entrada;
+ document.getElementById("salida").value=j.salida;
+ window.scrollTo(0,0);
+}
+
+function eliminar(fecha){
+ if(!confirm("¿Eliminar esta jornada?"))return;
+ jornadas=jornadas.filter(j=>j.fecha!==fecha);
+ localStorage.setItem(CLAVE,JSON.stringify(jornadas));
+ mostrar();
+}
+
+function mostrar(){
+ const p=periodo(document.getElementById("fecha").value||fechaHoy);
+ const registros=jornadas.filter(j=>j.fecha>=p.inicio&&j.fecha<=p.fin)
+ .sort((a,b)=>a.fecha.localeCompare(b.fecha));
+ let horas=0,extras=0;
+ const cont=document.getElementById("historial");
+ cont.replaceChildren();
+ registros.forEach(j=>{
+  const r=calcular(j.entrada,j.salida);
+  horas+=r.horas;
+  extras+=r.extras;
+  const div=document.createElement("div");
+  div.className="item";
+  const info=document.createElement("p");
+  info.textContent=j.fecha+" | "+j.entrada+" a "+j.salida+
+   " | "+r.horas.toFixed(2)+" h";
+  const editarBtn=document.createElement("button");
+  editarBtn.className="secondary";
+  editarBtn.textContent="Editar";
+  editarBtn.onclick=()=>editar(j.fecha);
+  const borrarBtn=document.createElement("button");
+  borrarBtn.className="secondary";
+  borrarBtn.textContent="Eliminar";
+  borrarBtn.onclick=()=>eliminar(j.fecha);
+  div.append(info,editarBtn,borrarBtn);
+  cont.appendChild(div);
+ });
+ document.getElementById("periodo").textContent=
+  "Período: "+p.inicio+" al "+p.fin;
+ document.getElementById("acumulado").textContent=
+  "Total trabajado: "+horas.toFixed(2)+" horas";
+ document.getElementById("extraAcum").textContent=
+  "Horas extras: "+extras.toFixed(2);
+ if(!registros.length){
+  cont.textContent="Todavía no hay jornadas registradas.";
+ }
+}
+document.getElementById("fecha").addEventListener("change",mostrar);
+mostrar();
 </script>
 </body>
 </html>
-
