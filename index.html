@@ -1,1 +1,65 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Quincena - UOCRA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#151515;color:white;font-family:Arial,sans-serif;padding:20px}
+h1{color:#ff8500;text-align:center}
+.sub{text-align:center;color:#aaa}
+.card{background:#242424;padding:18px;border-radius:14px;margin-top:20px}
+label{display:block;margin:14px 0 6px}
+input{width:100%;padding:13px;background:#333;color:white;border:1px solid #555;border-radius:8px;font-size:17px}
+button{width:100%;padding:15px;background:#ff8500;color:#111;border:0;border-radius:10px;font-size:17px;font-weight:bold;margin-top:18px}
+.resultado{font-size:23px;color:#ff9900;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>MI QUINCENA</h1>
+<p class="sub">UOCRA - Control de jornada</p>
+
+<div class="card">
+<h3>Registrar jornada</h3>
+<label>Fecha</label>
+<input type="date" id="fecha">
+<label>Hora de entrada</label>
+<input type="time" id="entrada" value="07:30">
+<label>Hora de salida</label>
+<input type="time" id="salida" value="17:00">
+<button onclick="calcular()">Calcular horas</button>
+</div>
+
+<div class="card">
+<h3>Resultado del día</h3>
+<p>Horas normales: <span id="normales">0</span></p>
+<p>Horas extras: <span id="extras">0</span></p>
+<p class="resultado" id="total">Total: 0 horas</p>
+</div>
+
+<script>
+document.getElementById("fecha").value =
+new Date().toLocaleDateString("en-CA");
+
+function calcular(){
+const entrada=document.getElementById("entrada").value;
+const salida=document.getElementById("salida").value;
+if(!entrada||!salida){alert("Completá los horarios");return;}
+const [he,me]=entrada.split(":").map(Number);
+const [hs,ms]=salida.split(":").map(Number);
+let minutos=(hs*60+ms)-(he*60+me);
+if(minutos<0)minutos+=1440;
+const horas=minutos/60;
+const normales=Math.min(horas,8);
+const extras=Math.max(horas-8,0);
+document.getElementById("normales").textContent=normales.toFixed(2);
+document.getElementById("extras").textContent=extras.toFixed(2);
+document.getElementById("total").textContent=
+"Total: "+horas.toFixed(2)+" horas";
+}
+</script>
+</body>
+</html>
+
