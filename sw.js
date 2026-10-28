@@ -1,5 +1,5 @@
 
-const CACHE = "mi-quincena-v1";
+const CACHE = "mi-quincena-v2";
 
 const ARCHIVOS = [
   "./",
