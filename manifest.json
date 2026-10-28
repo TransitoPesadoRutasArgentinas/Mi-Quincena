@@ -1,0 +1,12 @@
+
+{
+  "name": "Mi Quincena - UOCRA",
+  "short_name": "Mi Quincena",
+  "description": "Control de jornadas y horas trabajadas",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#151515",
+  "theme_color": "#ff8500",
+  "lang": "es-AR"
+}
