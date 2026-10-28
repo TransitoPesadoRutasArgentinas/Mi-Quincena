@@ -26,7 +26,26 @@ small{color:#aaa}
 <body>
 <h1>MI QUINCENA</h1>
 <p class="sub">UOCRA - Control de jornada</p>
+<div class="card">
+  <h2>Configuración salarial UOCRA</h2>
 
+  <label>Categoría laboral</label>
+  <select id="categoria">
+    <option value="ayudante">Ayudante</option>
+    <option value="medio">Medio Oficial</option>
+    <option value="oficial">Oficial</option>
+    <option value="especializado" selected>Oficial Especializado</option>
+    <option value="sereno">Sereno</option>
+  </select>
+
+  <label>Zona salarial</label>
+  <select id="zona">
+    <option value="A" selected>Zona A</option>
+    <option value="B">Zona B</option>
+    <option value="C">Zona C</option>
+    <option value="CA">Zona C-Austral</option>
+  </select>
+</div>
 <div class="card">
 <h2>Registrar jornada</h2>
 <label>Fecha</label>
