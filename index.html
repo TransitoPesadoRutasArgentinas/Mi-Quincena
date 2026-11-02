@@ -1,217 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mi Quincena - UOCRA</title>
- 
-<link rel="manifest" href="./manifest.json">
-  
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi Quincena - UOCRA</title><link rel="manifest" href="./manifest.json">
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#151515;color:white;font-family:Arial,sans-serif;padding:18px}
-h1{text-align:center;color:#ff8500;margin-bottom:5px}
-.sub{text-align:center;color:#aaa}
-.card{background:#242424;padding:18px;border-radius:15px;margin:20px 0}
-label{display:block;margin:14px 0 6px}
-input{width:100%;padding:13px;background:#333;color:white;border:1px solid #555;border-radius:9px;font-size:17px;color-scheme:dark}
-button{width:100%;padding:14px;margin-top:14px;background:#ff8500;color:#111;border:0;border-radius:10px;font-size:17px;font-weight:bold}
-.secondary{background:#444;color:white}
-.result{color:#ff9900;font-size:23px;font-weight:bold}
-.item{border-bottom:1px solid #555;padding:12px 0}
-small{color:#aaa}
-</style>
-</head>
-<body>
-<h1>MI QUINCENA</h1>
-<p class="sub">UOCRA - Control de jornada</p>
-<div class="card">
-  <h2>Configuración salarial UOCRA</h2>
-
-  <label>Categoría laboral</label>
-  <select id="categoria">
-    <option value="ayudante">Ayudante</option>
-    <option value="medio">Medio Oficial</option>
-    <option value="oficial">Oficial</option>
-    <option value="especializado" selected>Oficial Especializado</option>
-    <option value="sereno">Sereno</option>
-  </select>
-
-  <label>Zona salarial</label>
-  <select id="zona">
-    <option value="A" selected>Zona A</option>
-    <option value="B">Zona B</option>
-    <option value="C">Zona C</option>
-    <option value="CA">Zona C-Austral</option>
-  </select>
-</div>
-<div class="card">
-<h2>Registrar jornada</h2>
-<label>Fecha</label>
-<input type="date" id="fecha" min="2026-10-16">
-<label>Hora de entrada</label>
-<input type="time" id="entrada" value="07:30">
-<label>Hora de salida</label>
-<input type="time" id="salida" value="17:00" lang="es-AR">
-<button onclick="guardar()">Guardar jornada</button>
-</div>
-
-<div class="card">
-<h2>Resultado del día</h2>
-<p id="normales">Horas normales: 0</p>
-<p id="extras">Horas extras: 0</p>
-<p class="result" id="total">Total: 0 horas</p>
-</div>
-
-<div class="card">
-<h2>Resumen quincenal</h2>
-<p id="periodo"></p>
-<p id="acumulado">Total trabajado: 0 horas</p>
-<p id="extraAcum">Horas extras: 0</p>
-<h3>Jornadas registradas</h3>
-<div id="historial"></div>
-</div>
-
+*{box-sizing:border-box}body{margin:0;background:#151515;color:#fff;font-family:Arial,sans-serif;padding:18px;max-width:750px;margin-inline:auto}h1{text-align:center;color:#ff8500;margin-bottom:5px}.sub{text-align:center;color:#aaa}.card{background:#242424;padding:18px;border-radius:15px;margin:20px 0}label{display:block;margin:14px 0 6px}input,select{width:100%;padding:13px;background:#333;color:#fff;border:1px solid #555;border-radius:9px;font-size:17px;color-scheme:dark}button{width:100%;padding:14px;margin-top:14px;background:#ff8500;color:#111;border:0;border-radius:10px;font-size:17px;font-weight:bold}.secondary{background:#444;color:#fff}.danger{background:#6d3030;color:white}.result{color:#ff9900;font-size:23px;font-weight:bold}.item{border-bottom:1px solid #555;padding:12px 0}.muted,small{color:#aaa}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions button{font-size:15px}.pill{display:inline-block;background:#403021;color:#ffb45d;padding:5px 9px;border-radius:8px;font-size:13px}.note{font-size:14px;color:#bbb;line-height:1.5}
+</style></head><body>
+<h1>MI QUINCENA</h1><p class="sub">UOCRA - Control de jornada</p>
+<div class="card"><h2>Configuración salarial UOCRA</h2><label for="categoria">Categoría laboral</label><select id="categoria"><option value="ayudante">Ayudante</option><option value="medio">Medio Oficial</option><option value="oficial">Oficial</option><option value="especializado" selected>Oficial Especializado</option><option value="sereno">Sereno</option></select><label for="zona">Zona salarial</label><select id="zona"><option value="A" selected>Zona A</option><option value="B">Zona B</option><option value="C">Zona C</option><option value="CA">Zona C-Austral</option></select></div>
+<div class="card" id="registro"><h2>Registrar jornada</h2><label for="fecha">Fecha</label><input type="date" id="fecha" min="2026-10-16"><label for="entrada">Hora de entrada</label><input type="time" id="entrada" value="07:30" lang="es-AR"><label for="salida">Hora de salida</label><input type="time" id="salida" value="17:00" lang="es-AR"><button id="guardarBtn">Guardar jornada</button></div>
+<div class="card"><h2>Resultado del día</h2><p id="normales">Horas normales: 0</p><p id="extras">Horas extras: 0</p><p class="result" id="total">Total: 0 horas</p></div>
+<div class="card"><h2>Resumen quincenal</h2><p id="periodo"></p><p id="acumulado">Total trabajado: 0 horas</p><p id="extraAcum">Horas extras: 0</p><h3>Jornadas registradas</h3><div id="historial"></div></div>
+<div class="card"><h2>📅 Historial de quincenas</h2><p class="note">Seleccioná una quincena guardada para ver sus jornadas. Al cambiar de período no se elimina nada.</p><label for="selectorQuincena">Elegir quincena</label><select id="selectorQuincena"></select><button id="verQuincena" class="secondary">Ver quincena seleccionada</button><h3>Resumen mensual</h3><div id="mensuales"></div></div>
+<div class="card"><h2>🔐 Copia de seguridad</h2><p class="note">Los registros se guardan en este navegador. Exportá una copia antes de borrar datos, cambiar de teléfono o reinstalar la aplicación.</p><button id="exportar">Descargar copia de seguridad</button><label for="archivo">Restaurar una copia (.json)</label><input id="archivo" type="file" accept=".json,application/json"><button id="importar" class="secondary">Importar copia de seguridad</button><p class="note">Al importar, se combinan los registros. Si una fecha ya existe, se conserva la jornada actual.</p></div>
 <script>
-const CLAVE="mi_quincena_jornadas_v1";
+'use strict';
+const CLAVE='mi_quincena_jornadas_v1';
+const $=id=>document.getElementById(id);
 let jornadas=[];
-try{
- const datos=JSON.parse(localStorage.getItem(CLAVE)||"[]");
- if(Array.isArray(datos)) jornadas=datos;
-}catch(e){}
-
-const hoy=new Date();
-const fechaHoy=[
- hoy.getFullYear(),
- String(hoy.getMonth()+1).padStart(2,"0"),
- String(hoy.getDate()).padStart(2,"0")
-].join("-");
-document.getElementById("fecha").value=fechaHoy;
-
-function calcular(entrada,salida){
- const [he,me]=entrada.split(":").map(Number);
- const [hs,ms]=salida.split(":").map(Number);
- let minutos=(hs*60+ms)-(he*60+me);
- if(minutos<0) minutos+=1440;
- const horas=minutos/60;
- return {
-  horas,
-  normales:Math.min(horas,8),
-  extras:Math.max(horas-8,0)
- };
-}
-
-function guardar(){
- const fecha=document.getElementById("fecha").value;
- const entrada=document.getElementById("entrada").value;
- const salida=document.getElementById("salida").value;
- if(!fecha||!entrada||!salida){
-  alert("Completá todos los datos");
-  return;
- }
- if(fecha<"2026-10-16"){
-  alert("La fecha debe ser desde el 16 de octubre");
-  return;
- }
- const r=calcular(entrada,salida);
- if(r.horas===0){
-  alert("Revisá los horarios");
-  return;
- }
- if(jornadas.some(j=>j.fecha===fecha)){
-  if(!confirm("Ya existe ese día. ¿Reemplazarlo?"))return;
- }
- jornadas=jornadas.filter(j=>j.fecha!==fecha);
- jornadas.push({fecha,entrada,salida});
- localStorage.setItem(CLAVE,JSON.stringify(jornadas));
- document.getElementById("normales").textContent=
-  "Horas normales: "+r.normales.toFixed(2);
- document.getElementById("extras").textContent=
-  "Horas extras: "+r.extras.toFixed(2);
- document.getElementById("total").textContent=
-  "Total: "+r.horas.toFixed(2)+" horas";
- mostrar();
- alert("Jornada guardada");
-}
-
-function periodo(fecha){
- const [a,m,d]=fecha.split("-").map(Number);
- const inicio=d<=15?1:16;
- const fin=d<=15?15:new Date(a,m,0).getDate();
- return {
-  inicio:[a,String(m).padStart(2,"0"),String(inicio).padStart(2,"0")].join("-"),
-  fin:[a,String(m).padStart(2,"0"),String(fin).padStart(2,"0")].join("-")
- };
-}
-
-function editar(fecha){
- const j=jornadas.find(x=>x.fecha===fecha);
- if(!j)return;
- document.getElementById("fecha").value=j.fecha;
- document.getElementById("entrada").value=j.entrada;
- document.getElementById("salida").value=j.salida;
- window.scrollTo(0,0);
-}
-
-function eliminar(fecha){
- if(!confirm("¿Eliminar esta jornada?"))return;
- jornadas=jornadas.filter(j=>j.fecha!==fecha);
- localStorage.setItem(CLAVE,JSON.stringify(jornadas));
- mostrar();
-}
-
-function mostrar(){
- const p=periodo(document.getElementById("fecha").value||fechaHoy);
- const registros=jornadas.filter(j=>j.fecha>=p.inicio&&j.fecha<=p.fin)
- .sort((a,b)=>a.fecha.localeCompare(b.fecha));
- let horas=0,extras=0;
- const cont=document.getElementById("historial");
- cont.replaceChildren();
- registros.forEach(j=>{
-  const r=calcular(j.entrada,j.salida);
-  horas+=r.horas;
-  extras+=r.extras;
-  const div=document.createElement("div");
-  div.className="item";
-  const info=document.createElement("p");
-  info.textContent=j.fecha+" | "+j.entrada+" a "+j.salida+
-   " | "+r.horas.toFixed(2)+" h";
-  const editarBtn=document.createElement("button");
-  editarBtn.className="secondary";
-  editarBtn.textContent="Editar";
-  editarBtn.onclick=()=>editar(j.fecha);
-  const borrarBtn=document.createElement("button");
-  borrarBtn.className="secondary";
-  borrarBtn.textContent="Eliminar";
-  borrarBtn.onclick=()=>eliminar(j.fecha);
-  div.append(info,editarBtn,borrarBtn);
-  cont.appendChild(div);
- });
- document.getElementById("periodo").textContent=
-  "Período: "+p.inicio+" al "+p.fin;
- document.getElementById("acumulado").textContent=
-  "Total trabajado: "+horas.toFixed(2)+" horas";
- document.getElementById("extraAcum").textContent=
-  "Horas extras: "+extras.toFixed(2);
- if(!registros.length){
-  cont.textContent="Todavía no hay jornadas registradas.";
- }
-}
-document.getElementById("fecha").addEventListener("change",mostrar);
-mostrar();
-
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js");
-  });
-}
-</script>
-</body>
-</html>
-
-
-
-
+try{const datos=JSON.parse(localStorage.getItem(CLAVE)||'[]');if(Array.isArray(datos))jornadas=datos.filter(esJornada)}catch(e){alert('No se pudieron leer los datos guardados. No se modificaron.');}
+function esFecha(s){if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const [a,m,d]=s.split('-').map(Number);const x=new Date(a,m-1,d);return x.getFullYear()===a&&x.getMonth()===m-1&&x.getDate()===d;}
+function esHora(s){return typeof s==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(s)}
+function esJornada(j){return j&&esFecha(j.fecha)&&esHora(j.entrada)&&esHora(j.salida)}
+function fechaLocal(){const h=new Date();return [h.getFullYear(),String(h.getMonth()+1).padStart(2,'0'),String(h.getDate()).padStart(2,'0')].join('-')}
+const fechaHoy=fechaLocal();$('fecha').value=fechaHoy;
+function calcular(entrada,salida){const [he,me]=entrada.split(':').map(Number),[hs,ms]=salida.split(':').map(Number);let minutos=(hs*60+ms)-(he*60+me);if(minutos<0)minutos+=1440;const horas=minutos/60;return {horas,normales:Math.min(horas,8),extras:Math.max(horas-8,0)}}
+function periodo(fecha){const [a,m,d]=fecha.split('-').map(Number),inicio=d<=15?1:16,fin=d<=15?15:new Date(a,m,0).getDate();return {inicio:[a,String(m).padStart(2,'0'),String(inicio).padStart(2,'0')].join('-'),fin:[a,String(m).padStart(2,'0'),String(fin).padStart(2,'0')].join('-')}}
+function etiqueta(p){return p.inicio.split('-').reverse().join('/')+' al '+p.fin.split('-').reverse().join('/')}
+function persistir(nuevas){try{localStorage.setItem(CLAVE,JSON.stringify(nuevas));jornadas=nuevas;return true}catch(e){alert('No se pudo guardar. Revisá el almacenamiento del navegador.');return false}}
+function guardar(){const fecha=$('fecha').value,entrada=$('entrada').value,salida=$('salida').value;if(!esFecha(fecha)||!esHora(entrada)||!esHora(salida)){alert('Completá correctamente la fecha y los horarios');return}if(fecha<'2026-10-16'){alert('La fecha debe ser desde el 16 de octubre de 2026');return}const r=calcular(entrada,salida);if(r.horas===0){alert('Revisá los horarios');return}if(jornadas.some(j=>j.fecha===fecha)&&!confirm('Ya existe ese día. ¿Reemplazarlo?'))return;const nuevas=jornadas.filter(j=>j.fecha!==fecha);nuevas.push({fecha,entrada,salida});if(!persistir(nuevas))return;$('normales').textContent='Horas normales: '+r.normales.toFixed(2);$('extras').textContent='Horas extras: '+r.extras.toFixed(2);$('total').textContent='Total: '+r.horas.toFixed(2)+' horas';mostrar();alert('Jornada guardada')}
+function editar(fecha){const j=jornadas.find(x=>x.fecha===fecha);if(!j)return;$('fecha').value=j.fecha;$('entrada').value=j.entrada;$('salida').value=j.salida;mostrar();$('registro').scrollIntoView({behavior:'smooth'})}
+function eliminar(fecha){if(!confirm('¿Eliminar esta jornada?'))return;const nuevas=jornadas.filter(j=>j.fecha!==fecha);if(persistir(nuevas))mostrar()}
+function actualizarSelector(){const actual=$('selectorQuincena').value;const periodos=new Map();for(const j of jornadas){const p=periodo(j.fecha);periodos.set(p.inicio,p)}const vigente=periodo(fechaHoy);periodos.set(vigente.inicio,vigente);const lista=[...periodos.values()].sort((a,b)=>b.inicio.localeCompare(a.inicio));$('selectorQuincena').replaceChildren();for(const p of lista){const o=document.createElement('option');o.value=p.inicio;o.textContent=etiqueta(p)+(p.inicio===vigente.inicio?' (actual)':'');$('selectorQuincena').appendChild(o)}const mostrado=periodo($('fecha').value||fechaHoy).inicio;$('selectorQuincena').value=lista.some(p=>p.inicio===mostrado)?mostrado:(lista.some(p=>p.inicio===actual)?actual:vigente.inicio)}
+function mostrar(){const fecha=esFecha($('fecha').value)?$('fecha').value:fechaHoy,p=periodo(fecha);const registros=jornadas.filter(j=>j.fecha>=p.inicio&&j.fecha<=p.fin).sort((a,b)=>a.fecha.localeCompare(b.fecha));let horas=0,extras=0;const cont=$('historial');cont.replaceChildren();for(const j of registros){const r=calcular(j.entrada,j.salida);horas+=r.horas;extras+=r.extras;const div=document.createElement('div');div.className='item';const info=document.createElement('p');info.textContent=j.fecha+' | '+j.entrada+' a '+j.salida+' | '+r.horas.toFixed(2)+' h (normales '+r.normales.toFixed(2)+', extras '+r.extras.toFixed(2)+')';const botones=document.createElement('div');botones.className='actions';const editarBtn=document.createElement('button');editarBtn.className='secondary';editarBtn.textContent='Editar';editarBtn.onclick=()=>editar(j.fecha);const borrarBtn=document.createElement('button');borrarBtn.className='danger';borrarBtn.textContent='Eliminar';borrarBtn.onclick=()=>eliminar(j.fecha);botones.append(editarBtn,borrarBtn);div.append(info,botones);cont.appendChild(div)}$('periodo').textContent='Período: '+etiqueta(p);$('acumulado').textContent='Total trabajado: '+horas.toFixed(2)+' horas';$('extraAcum').textContent='Horas extras: '+extras.toFixed(2);if(!registros.length)cont.textContent='Todavía no hay jornadas registradas en esta quincena.';actualizarSelector();mostrarMensuales()}
+function mostrarMensuales(){const totales=new Map();for(const j of jornadas){const mes=j.fecha.slice(0,7),r=calcular(j.entrada,j.salida),t=totales.get(mes)||{horas:0,extras:0,dias:0};t.horas+=r.horas;t.extras+=r.extras;t.dias++;totales.set(mes,t)}const cont=$('mensuales');cont.replaceChildren();for(const [mes,t] of [...totales].sort((a,b)=>b[0].localeCompare(a[0]))){const p=document.createElement('p');p.className='item';p.textContent=mes+' · '+t.dias+' jornadas · '+t.horas.toFixed(2)+' h totales · '+t.extras.toFixed(2)+' h extras';cont.appendChild(p)}if(!totales.size)cont.textContent='Todavía no hay meses registrados.'}
+function exportar(){const contenido={aplicacion:'Mi Quincena',version:1,exportado:fechaLocal(),jornadas};const blob=new Blob([JSON.stringify(contenido,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='mi-quincena-respaldo-'+fechaLocal()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+async function importar(){const archivo=$('archivo').files[0];if(!archivo){alert('Seleccioná primero un archivo .json');return}try{const datos=JSON.parse(await archivo.text());const registros=Array.isArray(datos)?datos:datos?.jornadas;if(!Array.isArray(registros)||!registros.every(esJornada)){alert('El archivo no contiene jornadas válidas. No se modificó nada.');return}const nuevos=registros.filter(j=>j.fecha>='2026-10-16');const mapa=new Map(jornadas.map(j=>[j.fecha,j]));let agregados=0;for(const j of nuevos){if(!mapa.has(j.fecha)){mapa.set(j.fecha,j);agregados++}}if(!confirm('Se agregarán '+agregados+' jornadas nuevas. Las existentes se conservarán. ¿Continuar?'))return;if(persistir([...mapa.values()])){mostrar();alert('Copia importada. Jornadas nuevas: '+agregados)}}catch(e){alert('No se pudo leer el archivo JSON. No se modificó nada.')}}
+$('guardarBtn').addEventListener('click',guardar);$('fecha').addEventListener('change',mostrar);$('verQuincena').addEventListener('click',()=>{const p=$('selectorQuincena').value;if(p){$('fecha').value=p;mostrar();$('periodo').scrollIntoView({behavior:'smooth',block:'center'})}});$('exportar').addEventListener('click',exportar);$('importar').addEventListener('click',importar);mostrar();
+</script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn))}</script>
+</body></html>
