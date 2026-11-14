@@ -18,16 +18,20 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Preparar Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Preparar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
 
       - name: Crear proyecto Android
+        shell: bash
         run: |
           mkdir -p app/src/main/assets
           mkdir -p app/src/main/java/ar/miquincena/app
+          mkdir -p app/src/main/res/drawable
 
-          cp index.html manifest.json sw.js app/src/main/assets/
-          cp icon-192.png icon-512.png app/src/main/assets/
+          cp index.html app/src/main/assets/
+          cp icon-192.png app/src/main/res/drawable/icon.png
 
           cat > settings.gradle <<'EOF'
           pluginManagement {
@@ -67,8 +71,8 @@ jobs:
                   applicationId 'ar.miquincena.app'
                   minSdk 24
                   targetSdk 28
-                  versionCode 1
-                  versionName '1.0'
+                  versionCode 31
+                  versionName '3.1'
               }
           }
           EOF
@@ -77,8 +81,8 @@ jobs:
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <application
                   android:label="Mi Quincena"
-                  android:theme="@android:style/Theme.Material.Light.NoActionBar"
-                  android:usesCleartextTraffic="false">
+                  android:icon="@drawable/icon"
+                  android:theme="@android:style/Theme.Material.Light.NoActionBar">
                   <activity
                       android:name=".MainActivity"
                       android:exported="true">
@@ -104,11 +108,15 @@ jobs:
               @Override
               public void onCreate(Bundle state) {
                   super.onCreate(state);
+
                   WebView web = new WebView(this);
                   web.setWebViewClient(new WebViewClient());
+
                   WebSettings settings = web.getSettings();
                   settings.setJavaScriptEnabled(true);
                   settings.setDomStorageEnabled(true);
+                  settings.setAllowFileAccess(true);
+
                   setContentView(web);
                   web.loadUrl("file:///android_asset/index.html");
               }
@@ -116,12 +124,17 @@ jobs:
           EOF
 
       - name: Compilar APK
-        run: |
-          gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon
 
-      - name: Guardar APK descargable
+      - name: Preparar APK descargable
+        run: |
+          mkdir -p salida
+          cp app/build/outputs/apk/debug/app-debug.apk \
+             salida/Mi-Quincena-3.1.apk
+
+      - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Mi-Quincena-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Mi-Quincena-3.1
+          path: salida/Mi-Quincena-3.1.apk
           
