@@ -3,871 +3,534 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#151515">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
 <title>Mi Quincena 3.1</title>
-<link rel="manifest" href="./manifest.json">
 <style>
 *{box-sizing:border-box}
-body{
- margin:0 auto;padding:16px;max-width:750px;
- background:#151515;color:#fff;font-family:Arial,sans-serif
-}
-h1{text-align:center;color:#ff8500;margin:12px 0 5px}
-.sub{text-align:center;color:#aaa;margin-bottom:25px}
-.card{background:#242424;border-radius:15px;padding:18px;margin:18px 0}
-h2{font-size:21px;margin-top:0}
-h3{font-size:17px}
-label{display:block;margin:13px 0 6px}
-input:not([type=checkbox]),select{
- width:100%;padding:12px;background:#333;color:white;
- border:1px solid #555;border-radius:9px;font-size:16px;
- color-scheme:dark
-}
-input[type=checkbox]{accent-color:#ff8500;width:20px;height:20px}
-.check{display:flex;align-items:center;gap:10px}
-button{
- width:100%;padding:13px;margin-top:12px;background:#ff8500;
- border:0;border-radius:9px;color:#111;font-weight:bold;font-size:16px
-}
-.secondary{background:#444;color:white}
-.danger{background:#713030;color:white}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.actions button{font-size:14px}
-.item{border-bottom:1px solid #555;padding:12px 0}
-.item p{overflow-wrap:anywhere;line-height:1.5}
-.note{font-size:13px;color:#bbb;line-height:1.5}
-.result{color:#ff9900;font-size:23px;font-weight:bold}
-.panel{background:#333;padding:13px;border-radius:10px;margin-top:12px}
-.line{
- display:flex;justify-content:space-between;gap:12px;
- border-bottom:1px solid #444;padding:9px 0;font-size:14px
-}
-.line strong{text-align:right}
-.accent{color:#ff9900}
+body{margin:0;background:#101827;color:#f3f4f6;font-family:Arial,sans-serif}
+header{background:#1d293b;padding:20px;text-align:center}
+h1{margin:0;color:#fb923c;font-size:27px}
+h2{font-size:19px;color:#fb923c;margin:0 0 15px}
+small,.muted{color:#aab6c7}
+main{max-width:650px;margin:auto;padding:14px}
+section{background:#1e293b;border-radius:14px;padding:17px;margin-bottom:15px}
+label{display:block;font-size:14px;margin:12px 0 5px}
+input,select,button{width:100%;padding:12px;border-radius:9px;font-size:16px}
+input,select{background:#101827;color:white;border:1px solid #475569}
+button{background:#f97316;color:white;border:0;font-weight:bold;margin-top:12px;cursor:pointer}
+button.secondary{background:#334155}
+button.danger{background:#991b1b}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid>*{min-width:0}
+.stat{background:#101827;padding:12px;border-radius:9px;margin:8px 0}
+.stat strong{float:right;color:#fdba74}
+.total{font-size:22px;color:#4ade80;font-weight:bold;text-align:center;padding:16px}
+.item{background:#101827;border-radius:10px;padding:12px;margin:9px 0}
+.item button{font-size:13px;padding:8px}
+hr{border:0;border-top:1px solid #475569;margin:15px 0}
+nav{display:flex;gap:5px;padding:10px}
+nav button{font-size:13px;padding:10px 4px;background:#334155}
+nav button.active{background:#f97316}
+.hide{display:none}
+.notice{font-size:13px;color:#cbd5e1;line-height:1.5}
 </style>
 </head>
 <body>
+<header>
+<h1>MI QUINCENA</h1>
+<small>UOCRA · Control de jornadas · Versión 3.1</small>
+</header>
 
-<h1>💎 MI QUINCENA</h1>
-<p class="sub">UOCRA · Edición Diamante 3.1</p>
+<main>
+<nav>
+<button onclick="tab('jornadas')" id="b-jornadas">Jornadas</button>
+<button onclick="tab('resumen')" id="b-resumen">Resumen</button>
+<button onclick="tab('historial')" id="b-historial">Historial</button>
+</nav>
 
-<section class="card">
-<h2>⚙️ Configuración laboral</h2>
-<label>Categoría</label>
-<select id="categoria">
-<option value="ayudante">Ayudante</option>
-<option value="medio">Medio Oficial</option>
-<option value="oficial">Oficial</option>
-<option value="especializado" selected>Oficial Especializado</option>
-<option value="sereno">Sereno</option>
-</select>
-<label>Zona salarial</label>
-<select id="zona">
-<option value="A" selected>Zona A</option>
-<option value="B">Zona B</option>
-<option value="C">Zona C</option>
-<option value="CA">Zona C-Austral</option>
-</select>
-</section>
-
-<section class="card" id="registro">
-<h2>📅 Registrar jornada</h2>
+<section id="jornadas">
+<h2>Registrar jornada</h2>
 <label>Fecha</label>
-<input id="fecha" type="date" min="2026-10-16">
+<input type="date" id="fecha" min="2026-10-16">
+
+<div class="grid">
+<div>
 <label>Entrada</label>
-<input id="entrada" type="time" value="07:30" lang="es-AR">
+<input type="time" id="entrada" value="07:30">
+</div>
+<div>
 <label>Salida</label>
-<input id="salida" type="time" value="17:00" lang="es-AR">
-<label>Tipo de jornada</label>
-<select id="motivo">
-<option value="normal">☀️ Normal</option>
-<option value="lluvia">🌧️ Reducida por lluvia</option>
-<option value="suspendida">☔ Suspendida por lluvia</option>
-</select>
-<label class="check">
-<input id="feriado" type="checkbox"> Feriado trabajado
-</label>
-<label>Clasificación de horas con recargo</label>
-<select id="extraTipo">
-<option value="auto">Automática</option>
-<option value="50">Todas al 50 %</option>
-<option value="100">Todas al 100 %</option>
-</select>
-<p class="note">
-Criterio configurado: lunes a viernes, primeras 8 horas básicas;
-excedente al 50 %. Sábados hasta las 13:00 al 50 % y después
-al 100 %. Domingos y feriados trabajados al 100 %.
-Cálculo orientativo sujeto a tu convenio y liquidación.
-</p>
-<button id="guardarBtn">Guardar jornada</button>
-</section>
-
-<section class="card">
-<h2>⏱️ Resultado del día</h2>
-<p id="normales">Horas básicas: 0</p>
-<p id="extras">Horas con recargo: 0</p>
-<p class="result" id="total">Total: 0 horas</p>
-</section>
-
-<section class="card">
-<h2>📋 Resumen quincenal</h2>
-<p id="periodo"></p>
-<p id="acumulado"></p>
-<p id="extraAcum"></p>
-<h3>Jornadas registradas</h3>
-<div id="historial"></div>
-</section>
-
-<section class="card">
-<h2>💰 Estimación salarial</h2>
-<p class="note">
-Importes orientativos. Los adicionales variables se ingresan
-manualmente. El cálculo no sustituye el recibo de sueldo.
-</p>
-
-<label>Valor básico por hora ($)</label>
-<input id="valorHora" type="number" min="0" step="0.01" value="7420">
-
-<label>Presentismo (%)</label>
-<input id="presentismoPct" type="number" min="0" max="100" step="0.01" value="0">
-
-<label>Otros adicionales remunerativos ($)</label>
-<input id="adicionales" type="number" min="0" step="0.01" value="0">
-
-<label>Adicionales no remunerativos netos ($)</label>
-<input id="noRemunerativos" type="number" min="0" step="0.01" value="0">
-
-<label>Descuentos estimados (%)</label>
-<input id="descuentos" type="number" min="0" max="60" step="0.01" value="20.7">
-
-<div class="panel">
-<h3>🛡️ Mínimo asegurado</h3>
-<p class="note">
-Podés cambiar el importe cuando quieras.
-Cada quincena conserva su propio mínimo guardado.
-</p>
-<label>Mínimo asegurado neto ($)</label>
-<input id="minimo" type="number" min="0" step="0.01" value="900000">
+<input type="time" id="salida" value="17:00">
+</div>
 </div>
 
-<label>Importe realmente depositado ($)</label>
-<input id="cobroReal" type="number" min="0" step="0.01"
- placeholder="Completalo cuando cobres">
+<label>Tipo de jornada</label>
+<select id="tipo" onchange="cambiarTipo()">
+<option value="normal">Normal</option>
+<option value="reducida">Lluvia - Reducida</option>
+<option value="suspendida">Lluvia - Suspendida</option>
+<option value="franco">Franco / Sin trabajar</option>
+</select>
 
-<button id="guardarSueldo">Guardar valores de esta quincena</button>
-<div id="resumenSueldo"></div>
+<label>Clasificación de horas extras</label>
+<select id="extra">
+<option value="auto">Automática</option>
+<option value="50">Todas al 50%</option>
+<option value="100">Todas al 100%</option>
+</select>
+
+<label>
+<input type="checkbox" id="feriado" style="width:auto">
+ Feriado trabajado
+</label>
+
+<button onclick="guardarJornada()">Guardar jornada</button>
+<button class="secondary" onclick="limpiarFormulario()">Nueva jornada</button>
 </section>
 
-<section class="card">
-<h2>🗓️ Historial de quincenas</h2>
-<label>Elegir quincena</label>
-<select id="selectorQuincena"></select>
-<button id="verQuincena" class="secondary">Ver quincena seleccionada</button>
-<h3>Resumen mensual</h3>
-<div id="mensuales"></div>
+<section id="resumen" class="hide">
+<h2>Resumen de quincena</h2>
+
+<label>Quincena</label>
+<select id="periodo" onchange="actualizar()"></select>
+
+<h2>Configuración salarial</h2>
+<div class="grid">
+<div>
+<label>Categoría</label>
+<select id="categoria" onchange="guardarAjustes()">
+<option>Oficial Especializado</option>
+<option>Oficial</option>
+<option>Medio Oficial</option>
+<option>Ayudante</option>
+</select>
+</div>
+<div>
+<label>Zona</label>
+<select id="zona" onchange="guardarAjustes()">
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="C-Austral">C Austral</option>
+</select>
+</div>
+</div>
+
+<label>Valor de hora normal ($)</label>
+<input type="number" id="valorHora" value="7420" step="0.01" min="0" onchange="guardarSalario()">
+
+<div class="grid">
+<div>
+<label>Presentismo (%)</label>
+<input type="number" id="presentismoPct" value="20" min="0" onchange="guardarSalario()">
+</div>
+<div>
+<label>Descuentos (%)</label>
+<input type="number" id="descuentos" value="20.7" min="0" onchange="guardarSalario()">
+</div>
+</div>
+
+<label>Adicionales remunerativos ($)</label>
+<input type="number" id="adicionales" value="0" onchange="guardarSalario()">
+
+<label>Adicionales no remunerativos ($)</label>
+<input type="number" id="noRemunerativos" value="0" onchange="guardarSalario()">
+
+<label>Cobro real ($) - Opcional</label>
+<input type="number" id="cobroReal" placeholder="Ingresar cuando cobres" onchange="guardarSalario()">
+
+<hr>
+<h2>Horas registradas</h2>
+<div id="horasResumen"></div>
+<hr>
+<h2>Estimación salarial</h2>
+<div id="sueldoResumen"></div>
+<div class="total" id="netoTotal"></div>
+<p class="notice">Estimación basada en horas registradas. No incluye sueldo arreglado ni complemento por mínimo garantizado. El cálculo no sustituye el recibo de sueldo ni verifica automáticamente el convenio vigente.</p>
 </section>
 
-<section class="card">
-<h2>🔐 Copia de seguridad</h2>
-<p class="note">
-Guardá una copia antes de borrar datos, reinstalar la aplicación
-o cambiar de teléfono.
-</p>
-<button id="exportar">Descargar copia de seguridad</button>
-<label>Restaurar copia JSON</label>
-<input id="archivo" type="file" accept=".json,application/json">
-<button id="importar" class="secondary">Importar copia de seguridad</button>
+<section id="historial" class="hide">
+<h2>Historial de quincenas</h2>
+<div id="listaHistorial"></div>
+<hr>
+<h2>Resumen mensual</h2>
+<div id="mensual"></div>
+<hr>
+<h2>Copia de seguridad</h2>
+<button onclick="exportar()">Exportar respaldo JSON</button>
+<label>Importar respaldo JSON</label>
+<input type="file" accept=".json,application/json" id="archivo" onchange="importar(event)">
+<p class="notice">Los datos se guardan en este navegador. Exportá una copia antes de borrar datos del teléfono o cambiar de dispositivo.</p>
 </section>
+
+<section>
+<h2>Jornadas guardadas</h2>
+<div id="listaJornadas"></div>
+</section>
+</main>
 
 <script>
-'use strict';
-
-const CLAVE='mi_quincena_jornadas_v1';
-const CLAVE_SUELDO='mi_quincena_salarios_v1';
-const CLAVE_AJUSTES='mi_quincena_ajustes_v1';
+const KJ='mi_quincena_jornadas_v1';
+const KS='mi_quincena_salarios_v1';
+const KA='mi_quincena_ajustes_v1';
 const $=id=>document.getElementById(id);
 
-let jornadas=[];
-let salarios={};
-
-function esFecha(s){
- if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(s))
-  return false;
- const [a,m,d]=s.split('-').map(Number);
- const x=new Date(a,m-1,d);
- return x.getFullYear()===a &&
-        x.getMonth()===m-1 &&
-        x.getDate()===d;
+function leer(k,def){
+ try{
+  let v=JSON.parse(localStorage.getItem(k));
+  return v===null?def:v;
+ }catch(e){return def}
 }
+let jornadas=leer(KJ,[]);
+let salarios=leer(KS,{});
+let ajustes=leer(KA,{});
+let editando=null;
 
-function esHora(s){
- return typeof s==='string' &&
- /^([01]\d|2[0-3]):[0-5]\d$/.test(s);
+function fechaLocal(d=new Date()){
+ let y=d.getFullYear();
+ let m=String(d.getMonth()+1).padStart(2,'0');
+ let dia=String(d.getDate()).padStart(2,'0');
+ return `${y}-${m}-${dia}`;
 }
-
-function esJornada(j){
- return j&&esFecha(j.fecha)&&
- esHora(j.entrada)&&esHora(j.salida);
+function periodoDe(f){
+ return f.slice(0,7)+'-'+(Number(f.slice(8,10))<=15?'1':'2');
 }
-
-try{
- const d=JSON.parse(localStorage.getItem(CLAVE)||'[]');
- if(Array.isArray(d))jornadas=d.filter(esJornada);
-}catch(e){
- alert('No se pudieron leer las jornadas guardadas.');
+function nombrePeriodo(p){
+ let [y,m,q]=p.split('-');
+ return `${q==='1'?'1ª':'2ª'} quincena · ${m}/${y}`;
 }
-
-try{
- const d=JSON.parse(localStorage.getItem(CLAVE_SUELDO)||'{}');
- if(d&&typeof d==='object'&&!Array.isArray(d))salarios=d;
-}catch(e){}
-
-try{
- const d=JSON.parse(localStorage.getItem(CLAVE_AJUSTES)||'{}');
- if(d.categoria)$('categoria').value=d.categoria;
- if(d.zona)$('zona').value=d.zona;
-}catch(e){}
-
-function fechaLocal(){
- const d=new Date();
- return [
-  d.getFullYear(),
-  String(d.getMonth()+1).padStart(2,'0'),
-  String(d.getDate()).padStart(2,'0')
- ].join('-');
+function numero(v,def=0){
+ let n=Number(v);
+ return Number.isFinite(n)?n:def;
 }
-
-const fechaHoy=fechaLocal();
-$('fecha').value=fechaHoy;
-
-function minutosHora(h){
- const [a,b]=h.split(':').map(Number);
- return a*60+b;
-}
-
-function horas(n){
- return (n/60).toFixed(2);
-}
-
-function periodo(fecha){
- const [a,m,d]=fecha.split('-').map(Number);
- const inicio=d<=15?1:16;
- const fin=d<=15?15:new Date(a,m,0).getDate();
- return {
-  inicio:[
-   a,String(m).padStart(2,'0'),
-   String(inicio).padStart(2,'0')
-  ].join('-'),
-  fin:[
-   a,String(m).padStart(2,'0'),
-   String(fin).padStart(2,'0')
-  ].join('-')
- };
-}
-
-function periodoActual(){
- return periodo($('fecha').value||fechaHoy);
-}
-
-function etiqueta(p){
- return p.inicio.split('-').reverse().join('/')+
- ' al '+p.fin.split('-').reverse().join('/');
-}
-
-function clasificar(j){
- if(j.motivo==='suspendida'){
-  return {total:0,basicas:0,m50:0,m100:0};
- }
-
- const entrada=minutosHora(j.entrada);
- let salida=minutosHora(j.salida);
- if(salida<entrada)salida+=1440;
-
- const total=salida-entrada;
- const dia=new Date(j.fecha+'T12:00:00').getDay();
-
- let basicas=0;
- let m50=0;
- let m100=0;
-
- if(j.feriado||dia===0){
-  m100=total;
- }else if(dia===6){
-  const corte=13*60;
-  m50=Math.max(0,Math.min(salida,corte)-entrada);
-  m100=total-m50;
- }else{
-  basicas=Math.min(total,480);
-  m50=Math.max(0,total-480);
- }
-
- if(j.extraTipo==='50'){
-  m50+=m100;
-  m100=0;
- }else if(j.extraTipo==='100'){
-  m100+=m50;
-  m50=0;
- }
-
- return {total,basicas,m50,m100};
-}
-
-function pesos(n){
- return Number(n).toLocaleString('es-AR',{
-  style:'currency',
-  currency:'ARS',
-  maximumFractionDigits:0
+function dinero(n){
+ return numero(n).toLocaleString('es-AR',{
+ style:'currency',currency:'ARS',
+ maximumFractionDigits:2
  });
 }
-
-function persistir(nuevas){
- try{
-  localStorage.setItem(CLAVE,JSON.stringify(nuevas));
-  jornadas=nuevas;
-  return true;
- }catch(e){
-  alert('No se pudieron guardar las jornadas.');
-  return false;
- }
+function guardarDatos(){
+ localStorage.setItem(KJ,JSON.stringify(jornadas));
 }
+function horasEntre(a,b){
+ if(!a||!b)return 0;
+ let [ah,am]=a.split(':').map(Number);
+ let [bh,bm]=b.split(':').map(Number);
+ let n=(bh*60+bm-ah*60-am)/60;
+ return Math.max(0,n);
+}
+function calcularHoras(j){
+ let f=j.fecha;
+ let tipo=j.tipo||'normal';
+ if(tipo==='suspendida'||tipo==='franco')
+  return {basicas:0,e50:0,e100:0};
 
-function guardar(){
- const fecha=$('fecha').value;
- const entrada=$('entrada').value;
- const salida=$('salida').value;
- const motivo=$('motivo').value;
+ let h=horasEntre(j.entrada||'07:30',j.salida||'17:00');
+ let dia=new Date(f+'T12:00:00').getDay();
+ let basicas=0,e50=0,e100=0;
+ let modo=j.extra||'auto';
 
- if(!esFecha(fecha)||!esHora(entrada)||!esHora(salida)){
-  alert('Completá correctamente fecha y horarios.');
+ if(dia===0||j.feriado){
+  e100=h;
+ }else if(dia===6){
+  if(modo==='100')e100=h;
+  else if(modo==='50')e50=h;
+  else{
+   let hasta13=horasEntre(j.entrada||'07:30','13:00');
+   e50=Math.min(h,hasta13);
+   e100=Math.max(0,h-e50);
+  }
+ }else{
+  basicas=Math.min(h,8);
+  let excedente=Math.max(0,h-8);
+  if(modo==='100')e100=excedente;
+  else e50=excedente;
+ }
+ return {basicas,e50,e100};
+}
+function cambiarTipo(){
+ let t=$('tipo').value;
+ let des=t==='suspendida'||t==='franco';
+ $('entrada').disabled=des;
+ $('salida').disabled=des;
+}
+function limpiarFormulario(){
+ editando=null;
+ $('fecha').value=fechaLocal();
+ $('entrada').value='07:30';
+ $('salida').value='17:00';
+ $('tipo').value='normal';
+ $('extra').value='auto';
+ $('feriado').checked=false;
+ cambiarTipo();
+}
+function guardarJornada(){
+ let f=$('fecha').value;
+ if(!f||f<'2026-10-16'){
+  alert('Elegí una fecha válida desde el 16/10/2026');
   return;
  }
-
- if(fecha<'2026-10-16'){
-  alert('La fecha debe ser desde el 16 de octubre de 2026.');
+ let tipo=$('tipo').value;
+ if(tipo!=='suspendida'&&tipo!=='franco'&&
+ horasEntre($('entrada').value,$('salida').value)<=0){
+  alert('Revisá los horarios');
   return;
  }
-
- const nuevo={
-  fecha,entrada,salida,motivo,
-  feriado:$('feriado').checked,
-  extraTipo:$('extraTipo').value
+ let j={
+ fecha:f,
+ entrada:$('entrada').value,
+ salida:$('salida').value,
+ tipo,
+ extra:$('extra').value,
+ feriado:$('feriado').checked
  };
-
- const r=clasificar(nuevo);
-
- if(r.total===0&&motivo!=='suspendida'){
-  alert('Revisá los horarios.');
-  return;
+ if(editando!==null){
+  jornadas=jornadas.filter((x,i)=>i!==editando);
  }
-
- if(jornadas.some(j=>j.fecha===fecha)&&
- !confirm('Ya existe ese día. ¿Reemplazarlo?'))return;
-
- const nuevas=jornadas.filter(j=>j.fecha!==fecha);
- nuevas.push(nuevo);
-
- if(!persistir(nuevas))return;
-
- $('normales').textContent='Horas básicas: '+horas(r.basicas);
- $('extras').textContent='Horas con recargo: '+
- horas(r.m50+r.m100);
- $('total').textContent='Total: '+horas(r.total)+' horas';
-
- mostrar();
+ // Una jornada por fecha.
+ jornadas=jornadas.filter(x=>x.fecha!==f);
+ jornadas.push(j);
+ jornadas.sort((a,b)=>a.fecha.localeCompare(b.fecha));
+ guardarDatos();
+ limpiarFormulario();
+ actualizar();
  alert('Jornada guardada');
 }
-
-function editar(fecha){
- const j=jornadas.find(x=>x.fecha===fecha);
- if(!j)return;
-
+function editar(i){
+ let j=jornadas[i];
+ editando=i;
  $('fecha').value=j.fecha;
- $('entrada').value=j.entrada;
- $('salida').value=j.salida;
- $('motivo').value=j.motivo||'normal';
+ $('entrada').value=j.entrada||'07:30';
+ $('salida').value=j.salida||'17:00';
+ $('tipo').value=j.tipo||'normal';
+ $('extra').value=j.extra||'auto';
  $('feriado').checked=!!j.feriado;
- $('extraTipo').value=j.extraTipo||'auto';
-
- const susp=j.motivo==='suspendida';
- $('entrada').disabled=susp;
- $('salida').disabled=susp;
-
- cargarSueldo();
- mostrar();
- $('registro').scrollIntoView({behavior:'smooth'});
+ cambiarTipo();
+ tab('jornadas');
+ window.scrollTo(0,0);
 }
-
-function eliminar(fecha){
+function borrar(i){
  if(!confirm('¿Eliminar esta jornada?'))return;
- const nuevas=jornadas.filter(j=>j.fecha!==fecha);
- if(persistir(nuevas))mostrar();
+ jornadas.splice(i,1);
+ guardarDatos();
+ actualizar();
 }
-
-function actualizarSelector(){
- const periodos=new Map();
-
- for(const j of jornadas){
-  const p=periodo(j.fecha);
-  periodos.set(p.inicio,p);
- }
-
- for(const k of Object.keys(salarios)){
-  if(esFecha(k)){
-   const p=periodo(k);
-   periodos.set(p.inicio,p);
-  }
- }
-
- const vigente=periodo(fechaHoy);
- periodos.set(vigente.inicio,vigente);
-
- const lista=[...periodos.values()].sort(
-  (a,b)=>b.inicio.localeCompare(a.inicio)
- );
-
- const selector=$('selectorQuincena');
- selector.replaceChildren();
-
- for(const p of lista){
-  const o=document.createElement('option');
-  o.value=p.inicio;
-  o.textContent=etiqueta(p)+
-   (p.inicio===vigente.inicio?' (actual)':'');
-  selector.appendChild(o);
- }
-
- selector.value=periodoActual().inicio;
+function periodos(){
+ let s=new Set(jornadas.map(j=>periodoDe(j.fecha)));
+ Object.keys(salarios).forEach(p=>{
+  if(/^\d{4}-\d{2}-[12]$/.test(p))s.add(p);
+ });
+ s.add(periodoDe(fechaLocal()));
+ return [...s].sort().reverse();
 }
-
-const CAMPOS=[
- 'valorHora',
- 'presentismoPct',
- 'adicionales',
- 'noRemunerativos',
- 'descuentos',
- 'minimo',
- 'cobroReal'
-];
-
-const PREDETERMINADOS={
+function salarioDefault(){
+ return {
  valorHora:7420,
- presentismoPct:0,
+ presentismoPct:20,
+ descuentos:20.7,
  adicionales:0,
  noRemunerativos:0,
- descuentos:20.7,
- minimo:900000,
  cobroReal:''
-};
-
-function cargarSueldo(){
- const d=salarios[periodoActual().inicio]||{};
- for(const k of CAMPOS){
-  $(k).value=d[k]??PREDETERMINADOS[k];
- }
-}
-
-function guardarSueldo(){
- const d={};
-
- for(const k of CAMPOS){
-  const v=$(k).value;
-  d[k]=v===''?
-   (k==='cobroReal'?'':PREDETERMINADOS[k]):
-   Number(v);
-
-  if(d[k]!==''&&
-   (!Number.isFinite(d[k])||d[k]<0)){
-   alert('Revisá el campo '+k);
-   return;
-  }
- }
-
- if(d.descuentos>60||d.presentismoPct>100){
-  alert('Revisá los porcentajes.');
-  return;
- }
-
- const clave=periodoActual().inicio;
- const nuevos={...salarios,[clave]:d};
-
- try{
-  localStorage.setItem(CLAVE_SUELDO,JSON.stringify(nuevos));
-  salarios=nuevos;
-  mostrarSueldo();
-  actualizarSelector();
-  alert('Valores salariales guardados.');
- }catch(e){
-  alert('No se pudieron guardar los valores.');
- }
-}
-
-function agregarLinea(contenedor,nombre,valor,destacada=false){
- const fila=document.createElement('div');
- fila.className='line';
-
- const titulo=document.createElement('span');
- titulo.textContent=nombre;
-
- const dato=document.createElement('strong');
- dato.textContent=valor;
-
- if(destacada)dato.className='accent';
-
- fila.append(titulo,dato);
- contenedor.appendChild(fila);
-}
-
-function mostrarSueldo(){
- const p=periodoActual();
- const reg=jornadas.filter(j=>
-  j.fecha>=p.inicio&&j.fecha<=p.fin
- );
-
- const d=salarios[p.inicio]||{};
-
- const vh=Number(d.valorHora??7420);
- const presentismo=Number(d.presentismoPct??0);
- const adicionales=Number(d.adicionales??0);
- const noRem=Number(d.noRemunerativos??0);
- const descuentos=Number(d.descuentos??20.7);
- const minimo=Number(d.minimo??900000);
-
- let basicas=0,m50=0,m100=0,total=0,lluvias=0;
-
- for(const j of reg){
-  const r=clasificar(j);
-  basicas+=r.basicas;
-  m50+=r.m50;
-  m100+=r.m100;
-  total+=r.total;
-
-  if(j.motivo==='lluvia'||j.motivo==='suspendida'){
-   lluvias++;
-  }
- }
-
- const pagoBasico=basicas/60*vh;
- const pago50=m50/60*vh*1.5;
- const pago100=m100/60*vh*2;
- const subtotal=pagoBasico+pago50+pago100;
- const importePresentismo=subtotal*presentismo/100;
-
- const bruto=subtotal+importePresentismo+adicionales;
- const importeDescuentos=bruto*descuentos/100;
- const neto=bruto-importeDescuentos+noRem;
-
- const complemento=Math.max(0,minimo-neto);
- const estimado=neto+complemento;
-
- const div=$('resumenSueldo');
- div.replaceChildren();
-
- const titulo=document.createElement('h3');
- titulo.textContent='Detalle de la quincena';
- div.appendChild(titulo);
-
- agregarLinea(div,'Horas trabajadas',horas(total)+' h');
- agregarLinea(div,'Horas básicas',horas(basicas)+' h');
- agregarLinea(div,'Horas al 50 %',horas(m50)+' h');
- agregarLinea(div,'Horas al 100 %',horas(m100)+' h');
- agregarLinea(div,'Días afectados por lluvia',String(lluvias));
-
- agregarLinea(div,'Importe horas básicas',pesos(pagoBasico));
- agregarLinea(div,'Importe horas al 50 %',pesos(pago50));
- agregarLinea(div,'Importe horas al 100 %',pesos(pago100));
- agregarLinea(div,'Presentismo',pesos(importePresentismo));
- agregarLinea(div,'Otros remunerativos',pesos(adicionales));
- agregarLinea(div,'Bruto orientativo',pesos(bruto));
- agregarLinea(div,'Descuentos estimados','-'+pesos(importeDescuentos));
- agregarLinea(div,'No remunerativos netos',pesos(noRem));
- agregarLinea(div,'Neto calculado',pesos(neto));
- agregarLinea(div,'🛡️ Mínimo asegurado',pesos(minimo));
- agregarLinea(div,'Complemento al mínimo',pesos(complemento));
- agregarLinea(div,'💰 Estimado de bolsillo',pesos(estimado),true);
-
- if(d.cobroReal!==''&&d.cobroReal!=null){
-  const cobro=Number(d.cobroReal);
-  agregarLinea(div,'Cobro real',pesos(cobro));
-  agregarLinea(div,'Diferencia real - estimado',
-   pesos(cobro-estimado));
- }
-
- const aviso=document.createElement('p');
- aviso.className='note';
- aviso.textContent='El cálculo es orientativo. Compará los importes con el recibo real y los acuerdos de tu empresa.';
- div.appendChild(aviso);
-}
-
-function mostrarMensuales(){
- const totales=new Map();
-
- for(const j of jornadas){
-  const mes=j.fecha.slice(0,7);
-  const r=clasificar(j);
-
-  const t=totales.get(mes)||{
-   minutos:0,extras:0,dias:0
-  };
-
-  t.minutos+=r.total;
-  t.extras+=r.m50+r.m100;
-  t.dias++;
-
-  totales.set(mes,t);
- }
-
- const cont=$('mensuales');
- cont.replaceChildren();
-
- for(const [mes,t] of [...totales].sort(
-  (a,b)=>b[0].localeCompare(a[0])
- )){
-  const p=document.createElement('p');
-  p.className='item';
-  p.textContent=mes+' · '+t.dias+' jornadas · '+
-   horas(t.minutos)+' h totales · '+
-   horas(t.extras)+' h con recargo';
-  cont.appendChild(p);
- }
-
- if(!totales.size){
-  cont.textContent='Todavía no hay meses registrados.';
- }
-}
-
-function mostrar(){
- const p=periodoActual();
-
- const registros=jornadas.filter(j=>
-  j.fecha>=p.inicio&&j.fecha<=p.fin
- ).sort((a,b)=>a.fecha.localeCompare(b.fecha));
-
- let total=0,basicas=0,e50=0,e100=0;
-
- const cont=$('historial');
- cont.replaceChildren();
-
- for(const j of registros){
-  const r=clasificar(j);
-
-  total+=r.total;
-  basicas+=r.basicas;
-  e50+=r.m50;
-  e100+=r.m100;
-
-  const div=document.createElement('div');
-  div.className='item';
-
-  const info=document.createElement('p');
-  info.textContent=
-   j.fecha+' | '+j.entrada+' a '+j.salida+
-   ' | '+horas(r.total)+' h'+
-   ' (básicas '+horas(r.basicas)+
-   ', 50 % '+horas(r.m50)+
-   ', 100 % '+horas(r.m100)+')'+
-   (j.motivo==='lluvia'?' 🌧️ Lluvia':'')+
-   (j.motivo==='suspendida'?' ☔ Suspendida':'')+
-   (j.feriado?' 🎉 Feriado':'');
-
-  const botones=document.createElement('div');
-  botones.className='actions';
-
-  const editarBtn=document.createElement('button');
-  editarBtn.className='secondary';
-  editarBtn.textContent='Editar';
-  editarBtn.onclick=()=>editar(j.fecha);
-
-  const borrarBtn=document.createElement('button');
-  borrarBtn.className='danger';
-  borrarBtn.textContent='Eliminar';
-  borrarBtn.onclick=()=>eliminar(j.fecha);
-
-  botones.append(editarBtn,borrarBtn);
-  div.append(info,botones);
-  cont.appendChild(div);
- }
-
- $('periodo').textContent='Período: '+etiqueta(p);
- $('acumulado').textContent=
-  'Total trabajado: '+horas(total)+' horas';
-
- $('extraAcum').textContent=
-  'Básicas: '+horas(basicas)+
-  ' | 50 %: '+horas(e50)+
-  ' | 100 %: '+horas(e100);
-
- if(!registros.length){
-  cont.textContent='Todavía no hay jornadas registradas.';
- }
-
- actualizarSelector();
- mostrarMensuales();
- mostrarSueldo();
-}
-
-function exportar(){
- const contenido={
-  aplicacion:'Mi Quincena',
-  version:'3.1',
-  exportado:fechaLocal(),
-  jornadas,
-  salarios,
-  ajustes:{
-   categoria:$('categoria').value,
-   zona:$('zona').value
-  }
  };
-
- const blob=new Blob(
-  [JSON.stringify(contenido,null,2)],
-  {type:'application/json'}
- );
-
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a');
-
- a.href=url;
- a.download='mi-quincena-respaldo-'+fechaLocal()+'.json';
-
- document.body.appendChild(a);
- a.click();
- a.remove();
-
- setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
-
-async function importar(){
- const archivo=$('archivo').files[0];
-
- if(!archivo){
-  alert('Seleccioná primero un archivo JSON.');
-  return;
- }
-
- try{
-  const datos=JSON.parse(await archivo.text());
-  const registros=Array.isArray(datos)?
-   datos:datos?.jornadas;
-
-  if(!Array.isArray(registros)||
-   !registros.every(esJornada)){
-   alert('El archivo no contiene jornadas válidas.');
-   return;
-  }
-
-  const mapa=new Map(jornadas.map(j=>[j.fecha,j]));
-  let agregados=0;
-
-  for(const j of registros){
-   if(j.fecha>='2026-10-16'&&!mapa.has(j.fecha)){
-    mapa.set(j.fecha,j);
-    agregados++;
-   }
-  }
-
-  if(!confirm(
-   'Se agregarán '+agregados+
-   ' jornadas nuevas sin reemplazar las existentes. ¿Continuar?'
-  ))return;
-
-  if(!persistir([...mapa.values()]))return;
-
-  if(datos.salarios&&typeof datos.salarios==='object'&&
-   !Array.isArray(datos.salarios)){
-   const fusion={...datos.salarios,...salarios};
-
-   try{
-    localStorage.setItem(CLAVE_SUELDO,JSON.stringify(fusion));
-    salarios=fusion;
-   }catch(e){
-    alert('Se importaron las jornadas, pero no todos los valores salariales.');
-   }
-  }
-
-  if(datos.ajustes&&typeof datos.ajustes==='object'){
-   if(datos.ajustes.categoria){
-    $('categoria').value=datos.ajustes.categoria;
-   }
-   if(datos.ajustes.zona){
-    $('zona').value=datos.ajustes.zona;
-   }
-   guardarAjustes();
-  }
-
-  cargarSueldo();
-  mostrar();
-
-  alert('Copia importada. Jornadas nuevas: '+agregados);
-
- }catch(e){
-  
-  alert('No se pudo leer el archivo JSON.');
- }
+function salarioDe(p){
+ let s=salarios[p]||{};
+ return {...salarioDefault(),...s};
 }
-
 function guardarAjustes(){
- const datos={
-  categoria:$('categoria').value,
-  zona:$('zona').value
+ ajustes.categoria=$('categoria').value;
+ ajustes.zona=$('zona').value;
+ localStorage.setItem(KA,JSON.stringify(ajustes));
+}
+function guardarSalario(){
+ let p=$('periodo').value;
+ if(!p)return;
+ salarios[p]={
+ ...salarios[p],
+ valorHora:numero($('valorHora').value),
+ presentismoPct:numero($('presentismoPct').value),
+ descuentos:numero($('descuentos').value),
+ adicionales:numero($('adicionales').value),
+ noRemunerativos:numero($('noRemunerativos').value),
+ cobroReal:$('cobroReal').value
  };
-
- try{
-  localStorage.setItem(
-   CLAVE_AJUSTES,
-   JSON.stringify(datos)
-  );
- }catch(e){
-  console.warn('No se pudieron guardar los ajustes.');
+ localStorage.setItem(KS,JSON.stringify(salarios));
+ mostrarResumen();
+ mostrarHistorial();
+}
+function cargarSalario(){
+ let s=salarioDe($('periodo').value);
+ ['valorHora','presentismoPct','descuentos',
+ 'adicionales','noRemunerativos','cobroReal']
+ .forEach(k=>$(k).value=s[k]??'');
+}
+function calcularPeriodo(p){
+ let js=jornadas.filter(j=>periodoDe(j.fecha)===p);
+ let t={basicas:0,e50:0,e100:0};
+ js.forEach(j=>{
+  let h=calcularHoras(j);
+  Object.keys(t).forEach(k=>t[k]+=h[k]);
+ });
+ let s=salarioDe(p);
+ let v=numero(s.valorHora);
+ let normal=t.basicas*v;
+ let extra50=t.e50*v*1.5;
+ let extra100=t.e100*v*2;
+ let base=normal+extra50+extra100;
+ let presentismo=base*numero(s.presentismoPct)/100;
+ let adicionales=numero(s.adicionales);
+ let noRem=numero(s.noRemunerativos);
+ let bruto=base+presentismo+adicionales;
+ let descuentos=bruto*numero(s.descuentos)/100;
+ let neto=bruto-descuentos+noRem;
+ return {
+ ...t,normal,extra50,extra100,presentismo,
+ bruto,descuentos,neto,
+ cobroReal:s.cobroReal,
+ dias:js.length
+ };
+}
+function stat(t,v){
+ return `<div class="stat">${t}<strong>${v}</strong><div style="clear:both"></div></div>`;
+}
+function mostrarResumen(){
+ let p=$('periodo').value;
+ if(!p)return;
+ let r=calcularPeriodo(p);
+ $('horasResumen').innerHTML=
+ stat('Horas normales',r.basicas.toFixed(2))+
+ stat('Horas al 50%',r.e50.toFixed(2))+
+ stat('Horas al 100%',r.e100.toFixed(2))+
+ stat('Jornadas registradas',r.dias);
+ $('sueldoResumen').innerHTML=
+ stat('Horas normales',dinero(r.normal))+
+ stat('Extras 50%',dinero(r.extra50))+
+ stat('Extras 100%',dinero(r.extra100))+
+ stat('Presentismo',dinero(r.presentismo))+
+ stat('Bruto estimado',dinero(r.bruto))+
+ stat('Descuentos',dinero(r.descuentos));
+ $('netoTotal').textContent='Neto estimado: '+dinero(r.neto);
+ if(r.cobroReal!==''&&r.cobroReal!=null){
+  $('sueldoResumen').innerHTML+=
+  stat('Cobro real',dinero(r.cobroReal))+
+  stat('Diferencia real - estimado',
+  dinero(numero(r.cobroReal)-r.neto));
  }
 }
-
-$('guardarBtn').addEventListener('click',guardar);
-$('guardarSueldo').addEventListener('click',guardarSueldo);
-
-$('motivo').addEventListener('change',()=>{
- const susp=$('motivo').value==='suspendida';
- $('entrada').disabled=susp;
- $('salida').disabled=susp;
-});
-
-$('fecha').addEventListener('change',()=>{
- cargarSueldo();
- mostrar();
-});
-
-$('categoria').addEventListener('change',guardarAjustes);
-$('zona').addEventListener('change',guardarAjustes);
-
-$('verQuincena').addEventListener('click',()=>{
- const p=$('selectorQuincena').value;
-
- if(p){
-  $('fecha').value=p;
-  cargarSueldo();
-  mostrar();
-  $('periodo').scrollIntoView({
-   behavior:'smooth',
-   block:'center'
-  });
- }
-});
-
-$('exportar').addEventListener('click',exportar);
-$('importar').addEventListener('click',importar);
-
-cargarSueldo();
-mostrar();
-</script>
-
-<script>
-if('serviceWorker' in navigator){
- window.addEventListener('load',()=>{
-  navigator.serviceWorker.register('./sw.js')
-   .catch(console.warn);
+function mostrarJornadas(){
+ let html='';
+ jornadas.slice().reverse().forEach(j=>{
+  let i=jornadas.indexOf(j);
+  let h=calcularHoras(j);
+  html+=`<div class="item">
+  <b>${j.fecha}</b> · ${j.tipo||'normal'}
+  <p>${j.entrada||'--'} a ${j.salida||'--'}</p>
+  <small>Normales: ${h.basicas.toFixed(2)}
+  | 50%: ${h.e50.toFixed(2)}
+  | 100%: ${h.e100.toFixed(2)}</small>
+  <div class="grid">
+  <button class="secondary" onclick="editar(${i})">Editar</button>
+  <button class="danger" onclick="borrar(${i})">Eliminar</button>
+  </div></div>`;
+ });
+ $('listaJornadas').innerHTML=html||'<p>Sin jornadas registradas.</p>';
+}
+function mostrarHistorial(){
+ let ps=periodos();
+ $('listaHistorial').innerHTML=ps.map(p=>{
+  let r=calcularPeriodo(p);
+  return `<div class="item"><b>${nombrePeriodo(p)}</b>
+  <p>${r.dias} jornadas · ${(
+  r.basicas+r.e50+r.e100).toFixed(2)} horas</p>
+  <b>Neto estimado: ${dinero(r.neto)}</b>
+  <button class="secondary" onclick="abrirPeriodo('${p}')">Ver detalle</button>
+  </div>`;
+ }).join('');
+ let meses=[...new Set(ps.map(p=>p.slice(0,7)))];
+ $('mensual').innerHTML=meses.map(m=>{
+  let r1=calcularPeriodo(m+'-1');
+  let r2=calcularPeriodo(m+'-2');
+  return `<div class="item"><b>${m}</b>
+  <p>Total estimado: ${dinero(r1.neto+r2.neto)}</p>
+  <small>${r1.dias+r2.dias} jornadas</small>
+  </div>`;
+ }).join('');
+}
+function abrirPeriodo(p){
+ $('periodo').value=p;
+ cargarSalario();
+ mostrarResumen();
+ tab('resumen');
+}
+function actualizar(){
+ let actual=$('periodo').value;
+ let ps=periodos();
+ $('periodo').innerHTML=ps.map(p=>
+ `<option value="${p}">${nombrePeriodo(p)}</option>`
+ ).join('');
+ $('periodo').value=ps.includes(actual)?actual:ps[0];
+ cargarSalario();
+ mostrarResumen();
+ mostrarJornadas();
+ mostrarHistorial();
+}
+function tab(nombre){
+ ['jornadas','resumen','historial'].forEach(n=>{
+  $(n).classList.toggle('hide',n!==nombre);
+  $('b-'+n).classList.toggle('active',n===nombre);
  });
 }
+function exportar(){
+ let datos={
+ aplicacion:'Mi Quincena',
+ version:'3.1-sin-arreglado',
+ exportado:fechaLocal(),
+ jornadas,salarios,
+ ajustes:{
+ categoria:$('categoria').value,
+ zona:$('zona').value
+ }
+ };
+ let blob=new Blob([JSON.stringify(datos,null,2)],
+ {type:'application/json'});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement('a');
+ a.href=url;
+ a.download='mi-quincena-respaldo-'+fechaLocal()+'.json';
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function importar(ev){
+ let f=ev.target.files[0];
+ if(!f)return;
+ let lector=new FileReader();
+ lector.onload=()=>{
+  try{
+   let d=JSON.parse(lector.result);
+   if(!Array.isArray(d.jornadas))throw Error('Formato inválido');
+   if(!confirm('¿Importar respaldo? Se reemplazarán las jornadas actuales.'))return;
+   jornadas=d.jornadas;
+   salarios=d.salarios&&typeof d.salarios==='object'
+    &&!Array.isArray(d.salarios)?d.salarios:{};
+   ajustes=d.ajustes||{};
+   guardarDatos();
+   localStorage.setItem(KS,JSON.stringify(salarios));
+   localStorage.setItem(KA,JSON.stringify(ajustes));
+   $('categoria').value=ajustes.categoria||'Oficial Especializado';
+   $('zona').value=ajustes.zona||'A';
+   actualizar();
+   alert('Respaldo importado');
+  }catch(e){alert('No se pudo importar el archivo');}
+  ev.target.value='';
+ };
+ lector.readAsText(f);
+}
+$('categoria').value=ajustes.categoria||'Oficial Especializado';
+$('zona').value=ajustes.zona||'A';
+limpiarFormulario();
+actualizar();
+tab('jornadas');
 </script>
-
 </body>
 </html>
